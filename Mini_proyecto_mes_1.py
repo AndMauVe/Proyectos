@@ -30,9 +30,22 @@ def ValidacionDeNumero(limite_inf,limite_sup,mensaje_pregunta):
     return int(numero)
 
 def AgregarNuevoExperimento():
-    print()
+    nombre = input("Ingrese el nombre del experimento: ")
+    fecha = input("Ingrese la fecha del experimento: ")
+    tipo = ValidacionDeNumero(1,3,"Digite el tipo de experimento correspondiente")
+    
+    num_resulados = ValidacionDeNumero(1,100,"Ingrese la cantidad de datos del experimento: ")
+    resultados = []
+    for i in range(num_resulados):
+        resultado = input("\nIngrese el resultado obtenido: ")  
 
-def MostrarResultadosExperimento():
+        while resultado.isdigit() == False:
+            resultado = input("Resultado ingresado incorrecto\nIngrese el resultado obtenido nuevamente: ")  
+        resultados.append(resultado)
+    return {"nombre":nombre,"fecha":fecha,"tipo":tipo,"resultados":resultados}
+
+
+def MostrarResultadosExperimento(experimentos:list):
     print()
 
 def RealizarAnalisisDeDatos():
@@ -53,13 +66,11 @@ Experimentos = []
 while opcion != 7:
     opcion = ValidacionDeNumero(1,7,menu)
     system("cls")
-    if opcion == 1:
+    if opcion == 1:#AgregarNuevoExperimento
+        Experimentos.append(AgregarNuevoExperimento())
+                
+    elif opcion == 2:   #MostrarResultadosExperimento        
         print()
-        #AgregarNuevoExperimento
-        
-    elif opcion == 2:
-        print()
-        #MostrarResultadosExperimento
 
     elif opcion == 3:
         print()
