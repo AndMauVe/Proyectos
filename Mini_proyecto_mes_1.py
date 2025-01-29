@@ -61,4 +61,5 @@ while opcion != 7:
         print()
         #GenerarInforme
 
+
 print("Que tenga un buen dia ^^")
