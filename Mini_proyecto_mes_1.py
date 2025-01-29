@@ -10,8 +10,24 @@ menu += "6. Generar informe de experimento\n"
 menu += "7. Salir\n" 
 menu += "ej: si desea ingresar un nuevo experimento debe digitar 1"
 
-def ValidacionDeNumero():
-    print()
+def ValidacionDeNumero(limite_inf,limite_sup,mensaje_pregunta):
+    numero = input(f"{mensaje_pregunta}\nIngrese la opcion deseada: ")
+    if numero.isdigit() == False:
+        es_numero = False
+    else:
+        numero = int(numero)
+        es_numero = True
+    
+    while es_numero == False or numero < limite_inf or numero > limite_sup:
+        system("cls")
+        numero = input(f"El numero ingresado no es correcto ha ingresado({numero})\nIntente nuevamente\n{mensaje_pregunta}\nIngrese la opcion deseada: ")
+        if numero.isdigit() == False:
+            es_numero = False
+        else:
+            numero = int(numero)
+            es_numero = True
+    
+    return int(numero)
 
 def AgregarNuevoExperimento():
     print()
