@@ -85,6 +85,13 @@ def MostrarResultadosExperimento(experimentos:list):
 def RealizarAnalisisDeDatos(experimentos:list ):
     indice = MostrarResultadosExperimento(experimentos)
     indice -= 1
+
+    datos = experimentos[indice]["resultados"]
+    print(f"Promedio: {sum(datos) / len(datos):.2f}")
+    print(f"Máximo: {max(datos)}")
+    print(f"Mínimo: {min(datos)}")
+
+
     print()
 
 def EliminarExperimento():
@@ -115,8 +122,12 @@ while opcion != 7:
             input("presione enter para continuar")
 
     elif opcion == 3:
-        print()
-        # RealizarAnalisisDeDatos
+        if not Experimentos:
+            print("No hay experimentos registrados.")
+        else:
+            RealizarAnalisisDeDatos(Experimentos)
+            
+        input("presione enter para continuar")
 
     elif opcion == 4:
         print()
