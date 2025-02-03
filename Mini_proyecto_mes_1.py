@@ -33,6 +33,7 @@ def ValidacionDeNumero(limite_inf,limite_sup,mensaje_pregunta):
 def AgregarNuevoExperimento():
     nombre = ""
     while len(nombre) == 0:
+        system("cls")
         nombre = input("Ingrese el nombre del experimento: ")
     
     fecha = ValidacionDeNumero(1,31,"Ingrese el dia del experimento (numero 1-31): ")
@@ -47,40 +48,43 @@ def AgregarNuevoExperimento():
     elif tipo == 3:
         tipo = "Fisica"
 
-    num_resulados = ValidacionDeNumero(1,100,"Ingrese la cantidad de datos del experimento: ")
+    #num_resulados = ValidacionDeNumero(1,100,"Ingrese la cantidad de datos del experimento: ")
     resultados = []
-    for i in range(num_resulados):
-        resultado = input("\nIngrese el resultado obtenido (numero): ")  
+    #for i in range(num_resulados):
+    #resultado = input("\nIngrese el resultado obtenido (numero): ")  
+    try:
+        resultados = list(map(float, input("Ingrese los resultados separados por coma: ").split(",")))
+        correcto = True
+    except ValueError:
+        correcto = False
+    while correcto == False:
+        system("cls")
+        print("Resultado ingresado incorrecto\nIngrese el resultado obtenido nuevamente\nRecuerde ingresar numeros: ")  
         try:
-            resultado = float(resultado)
-            resultados.append(resultado)
-            continue 
+            resultados = list(map(float, input("Ingrese los resultados separados por coma: ").split(",")))
+            correcto = True
         except ValueError:
-            resultado = "hi"
-        while resultado.isdigit() == False:
-            resultado = input("Resultado ingresado incorrecto\nIngrese el resultado obtenido nuevamente\nRecuerde ingresar numeros: ")  
-            try:
-                resultado = float(resultado)
-                resultados.append(resultado)
-                resultado = "1"
-                continue  
-            except ValueError:
-                resultado = "hi"
-        
+            correcto = False
+    
     return {"nombre":nombre,"fecha":fecha,"tipo":tipo,"resultados":resultados}
 
 
 def MostrarResultadosExperimento(experimentos:list):
-    #Aqui puedo hacer que el usuario escoja que experimento###########################################################################
-    if len(experimentos) != 0:
-        for experimento in experimentos:
-            for i in experimento:
-                print(f"{i}: {experimento[i]}")
-    else:
-        system("cls")
-        print("Aun no hay experimentos registrados\n")
+    if not experimentos:
+        print("Aun no hay experimentos registrados.")
+        return 0
+    
+    pregunta = ""
+    for i,exp in enumerate(experimentos,1):
+        pregunta += f"{i}. {exp["nombre"]}\n" 
+    
+    indice = ValidacionDeNumero(1,len(experimentos),f"{pregunta}\nDeacuerdo al experimento que desea ver")
 
-def RealizarAnalisisDeDatos():
+    return indice
+
+def RealizarAnalisisDeDatos(experimentos:list ):
+    indice = MostrarResultadosExperimento(experimentos)
+    indice -= 1
     print()
 
 def EliminarExperimento():
@@ -102,8 +106,13 @@ while opcion != 7:
         Experimentos.append(AgregarNuevoExperimento())
                 
     elif opcion == 2:   #MostrarResultadosExperimento        
-        MostrarResultadosExperimento(Experimentos)
-        input("presione enter para continuar")
+        indice = MostrarResultadosExperimento(Experimentos)
+        if indice != 0:
+            for ex in Experimentos[indice-1]:
+                print(f"{ex}: {Experimentos[indice-1][ex]}")
+            input("presione enter para continuar")
+        else:
+            input("presione enter para continuar")
 
     elif opcion == 3:
         print()
