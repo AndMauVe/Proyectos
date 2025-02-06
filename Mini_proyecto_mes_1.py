@@ -131,12 +131,26 @@ def RealizarAnalisisDeDatos(experimentos:list ):
 def EliminarExperimento():
     print()
 
-# Futura funcion para modificar un experimento
-def ModificarExperimento():
-    print()
+# Futura funcion para modificar un experimento, recibe un parametro de tipo lista con los experimentos
+def ModificarExperimento(experimentos:list):
+    # Obtengo el indice que el usuario quiere modificar 
+    indice = MostrarResultadosExperimento(experimentos) - 1
+    # Con el indice que me da la funcion voy a reemplazar en la lista experimentos ese experimento con ese indice con un nuevo
+    # experimento 
+    experimentos[indice] = AgregarNuevoExperimento()
+    return experimentos
+    
 
 # Futura funcion para generar el informe de un experimento
-def GenerarInforme():
+def GenerarInforme(experimentos:list):
+    #Esta incompleto, solo crea un txt y escribe Primera linea.\nSegunda línea.\n línea.\n
+    archi1=open("G:\Mi unidad\phyton\Curso con Dev senior code\Proyectos\datos.txt","w") 
+    experimentos_cadena = ""
+
+    archi1.write("Primer línea.\n") 
+    archi1.write("Segunda línea.\n") 
+    archi1.write(" línea.\n")  
+    archi1.close() 
     print()
 
 # Creo una variable donde guardo la opcion de menu del usuario, tambien un diccionario para guardar los diccionarios con la
@@ -190,11 +204,11 @@ while opcion != 7:
         #EliminarExperimento
         
     elif opcion == 5:
-        print()
+        Experimentos = ModificarExperimento(Experimentos)
         #ModificarExperimento
     
     elif opcion == 6:
-        print()
+        GenerarInforme(Experimentos)
         #GenerarInforme
 
 
