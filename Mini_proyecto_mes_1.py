@@ -128,8 +128,27 @@ def RealizarAnalisisDeDatos(experimentos:list ):
     print(f"Mínimo: {min(datos)}")
 
 # Futura funcion para eliminar un experimento
-def EliminarExperimento():
-    print()
+def EliminarExperimento(experimentos:list):
+    if not experimentos:
+        print("No hay experimentos registrados para eliminar.")
+        input("Presione Enter para continuar...")
+        return experimentos
+    indice = MostrarResultadosExperimento(experimentos) - 1
+
+    system("cls")
+    confirmacion = input(f"¿Esta seguro que desea Eliminar el experimento '{experimentos[indice]['nombre']}'? (s/n): ").strip().lower()
+    
+    if confirmacion == 's':
+        del experimentos[indice]
+        print("Experimento eliminado correctamente. ")
+    else:
+        print("Operacion Cancelada.")
+
+    input("Presione Enter para continuar...")
+
+    
+    return experimentos
+    
 
 # Futura funcion para modificar un experimento, recibe un parametro de tipo lista con los experimentos
 def ModificarExperimento(experimentos:list):
@@ -200,9 +219,8 @@ while opcion != 7:
         input("presione enter para continuar")
 
     elif opcion == 4:
-        print()
-        #EliminarExperimento
-        
+        Experimentos = EliminarExperimento(Experimentos)
+
     elif opcion == 5:
         Experimentos = ModificarExperimento(Experimentos)
         #ModificarExperimento
