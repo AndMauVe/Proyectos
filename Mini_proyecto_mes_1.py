@@ -230,4 +230,4 @@ while opcion != 7:
         #GenerarInforme
 
 
-print("Que tenga un buen dia ^^")
+print("Que tenga un buen dia ^")
