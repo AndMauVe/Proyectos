@@ -129,6 +129,8 @@ def RealizarAnalisisDeDatos(experimentos:list ):
 
 # Futura funcion para eliminar un experimento
 def EliminarExperimento(experimentos:list):
+
+# Se crea esta condicional para especificar si no tenemos experimentos se saldra a experimentos.
     if not experimentos:
         print("No hay experimentos registrados para eliminar.")
         input("Presione Enter para continuar...")
@@ -136,17 +138,20 @@ def EliminarExperimento(experimentos:list):
     indice = MostrarResultadosExperimento(experimentos) - 1
 
     system("cls")
+
+#Se crea esta variable para especificar que idice damos a elegir entre S o N adicional se agrego funciones 
+#Strip para eliminar espacios y Lower para colocar cualquier letra ingresada en Minuscula
     confirmacion = input(f"¿Esta seguro que desea Eliminar el experimento '{experimentos[indice]['nombre']}'? (s/n): ").strip().lower()
-    
+# Si el usuario ingresa S se eliminaria la elegida en el indice    
     if confirmacion == 's':
         del experimentos[indice]
         print("Experimento eliminado correctamente. ")
+# De lo contrario imprime un comentario que se cancelo
     else:
         print("Operacion Cancelada.")
-
+    #espera que el usuario ingrese enter
     input("Presione Enter para continuar...")
 
-    
     return experimentos
     
 
@@ -220,6 +225,7 @@ while opcion != 7:
 
     elif opcion == 4:
         Experimentos = EliminarExperimento(Experimentos)
+        #EliminarExperiento
 
     elif opcion == 5:
         Experimentos = ModificarExperimento(Experimentos)
