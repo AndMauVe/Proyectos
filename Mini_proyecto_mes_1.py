@@ -8,7 +8,7 @@ menu += "3. Realizar analisis de datos\n"
 menu += "4. Eliminar experimento\n"
 menu += "5. Modificar experimento\n"
 menu += "6. Generar informe de experimento\n"
-menu += "7. Salir\n"
+menu += "7. Salir\n" 
 menu += "ej: si desea ingresar un nuevo experimento debe digitar 1"
 
 # Se crea una funcion encargada de validar que un dato sea un numero, esta funcion tiene como parametros un limite inferior
@@ -128,6 +128,7 @@ def RealizarAnalisisDeDatos(experimentos:list ):
     print(f"Mínimo: {min(datos)}")
 
 # Futura funcion para eliminar un experimento
+
 def EliminarExperimento(experimentos:list):
 
 # Se crea esta condicional para especificar si no tenemos experimentos se saldra a experimentos.
@@ -158,11 +159,17 @@ def EliminarExperimento(experimentos:list):
 # Futura funcion para modificar un experimento, recibe un parametro de tipo lista con los experimentos
 def ModificarExperimento(experimentos:list):
     # Obtengo el indice que el usuario quiere modificar 
+    if not experimentos:
+        print("Aun no hay experimentos registrados.")
+        input("presione enter para continuar")
+        return 
+    
     indice = MostrarResultadosExperimento(experimentos) - 1
+    # Con el indice que me da la funcion voy a reemplazar en la lista experimentos ese experimento con ese indice con un nuevo
+    # experimento 
+    experimentos[indice] = AgregarNuevoExperimento()
     return experimentos
- 
-  
- 
+    
 # Futura funcion para generar el informe de un experimento
 def GenerarInforme(experimentos:list):
     #Esta incompleto, solo crea un txt y escribe Primera linea.\nSegunda línea.\n línea.\n
@@ -222,6 +229,7 @@ while opcion != 7:
         input("presione enter para continuar")
 
     elif opcion == 4:
+
         Experimentos = EliminarExperimento(Experimentos)
         #EliminarExperiento
 
@@ -234,4 +242,5 @@ while opcion != 7:
         #GenerarInforme
 
 
-print("Que tenga un buen dia ^")
+print("Que tenga un buen dia ^^")
+
