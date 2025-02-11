@@ -8,7 +8,7 @@ menu += "3. Realizar analisis de datos\n"
 menu += "4. Eliminar experimento\n"
 menu += "5. Modificar experimento\n"
 menu += "6. Generar informe de experimento\n"
-menu += "7. Salir\n" 
+menu += "7. Salir\n"
 menu += "ej: si desea ingresar un nuevo experimento debe digitar 1"
 
 # Se crea una funcion encargada de validar que un dato sea un numero, esta funcion tiene como parametros un limite inferior
@@ -159,12 +159,10 @@ def EliminarExperimento(experimentos:list):
 def ModificarExperimento(experimentos:list):
     # Obtengo el indice que el usuario quiere modificar 
     indice = MostrarResultadosExperimento(experimentos) - 1
-    # Con el indice que me da la funcion voy a reemplazar en la lista experimentos ese experimento con ese indice con un nuevo
-    # experimento 
-    experimentos[indice] = AgregarNuevoExperimento()
     return experimentos
-    
-
+ 
+  
+ 
 # Futura funcion para generar el informe de un experimento
 def GenerarInforme(experimentos:list):
     #Esta incompleto, solo crea un txt y escribe Primera linea.\nSegunda línea.\n línea.\n
