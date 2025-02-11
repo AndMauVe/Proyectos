@@ -129,11 +129,50 @@ def RealizarAnalisisDeDatos(experimentos:list ):
 
 # Futura funcion para eliminar un experimento
 def EliminarExperimento():
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     print()
 
 # Futura funcion para modificar un experimento, recibe un parametro de tipo lista con los experimentos
 def ModificarExperimento(experimentos:list):
     # Obtengo el indice que el usuario quiere modificar 
+    if not experimentos:
+        print("Aun no hay experimentos registrados.")
+        input("presione enter para continuar")
+        return 
+    
     indice = MostrarResultadosExperimento(experimentos) - 1
     # Con el indice que me da la funcion voy a reemplazar en la lista experimentos ese experimento con ese indice con un nuevo
     # experimento 
