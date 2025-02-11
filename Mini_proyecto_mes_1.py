@@ -109,7 +109,7 @@ def MostrarResultadosExperimento(experimentos:list):
         pregunta += f"{i}. {exp["nombre"]}\n" 
     
     # Uso la funcion para validar que el usuario digite un dato correcto
-    indice = ValidacionDeNumero(1,len(experimentos),f"{pregunta}\nDeacuerdo al experimento que desea ver")
+    indice = ValidacionDeNumero(1,len(experimentos),f"{pregunta}\nDeacuerdo al experimento")
 
     # Retorno el indice que contiene la ubicacion del experimento
     return indice
@@ -163,6 +163,8 @@ def EliminarExperimento():
 
 
 
+
+
     print()
 
 # Futura funcion para modificar un experimento, recibe un parametro de tipo lista con los experimentos
@@ -171,13 +173,74 @@ def ModificarExperimento(experimentos:list):
     if not experimentos:
         print("Aun no hay experimentos registrados.")
         input("presione enter para continuar")
-        return 
+        return experimentos
     
     indice = MostrarResultadosExperimento(experimentos) - 1
     # Con el indice que me da la funcion voy a reemplazar en la lista experimentos ese experimento con ese indice con un nuevo
     # experimento 
-    experimentos[indice] = AgregarNuevoExperimento()
-    return experimentos
+    mini_menu = "\n0.Volver a menu principal" 
+    mini_menu += "\n1.Modificar todo el experimento"
+    mini_menu += "\n2.Modificar nombre"
+    mini_menu += "\n3.Modificar fecha"
+    mini_menu += "\n4.Modificar tipo"
+    mini_menu += "\n5.Modificar resultados"
+    opcion_mini_menu = ValidacionDeNumero(0,5,mini_menu)
+    if opcion_mini_menu == 0:
+        #retorna el mismo experimento para no reemplazar nada cuando vuelva el usuario
+        return experimentos
+    elif opcion_mini_menu == 1:
+        # Crea un experimento nuevo y retorna el nuevo ecperimento
+        experimentos[indice] = AgregarNuevoExperimento()
+        return experimentos
+    elif opcion_mini_menu == 2:
+        # Se le pregunta al usuario un nombre para el experimento hasta que digite al menos una letra o caracter
+        nombre = ""
+        while len(nombre) == 0:
+            system("cls")
+            nombre = input("Ingrese el nombre del experimento: ")
+        experimentos[indice]["nombre"] = nombre
+        return experimentos
+    elif opcion_mini_menu == 3:
+           # Se le pide al usuario la fecha del experimento usando la funcion ValidacionDeNumero
+        fecha = str(ValidacionDeNumero(1,31,"Ingrese el dia del experimento (numero 1-31): ")) + " / "
+        fecha += str(ValidacionDeNumero(1,12,"Ingrese el mes del experimento (numero 1-12): ")) + " / "
+        fecha += str(ValidacionDeNumero(1900,2025,"Ingrese el año del experimento (numero 1900-2025): "))
+        experimentos[indice]["fecha"] = fecha
+        return experimentos
+    elif opcion_mini_menu == 4:
+        # Se le pide al usuario el tipo del experimento usando la funcion ValidacionDeNumero
+        tipo = ValidacionDeNumero(1,3,"Digite el tipo de experimento correspondiente\n1. Quimica\n2. Biologia\n3. Fisica")
+        # Dependiendo del numero se le asigna un str con el tipo de experimento
+        if tipo == 1:
+            tipo = "Quimica"
+        elif tipo == 2:
+            tipo = "Biologia"
+        elif tipo == 3:
+            tipo = "Fisica"
+        experimentos[indice]["tipo"] = tipo
+        return experimentos
+    elif opcion_mini_menu == 5:
+        # Se crea una lista donde se guardaran los resultados del usuario
+        resultados = [] 
+        # Se hace una validacion de que el usuario ingrese correctamente los resultados del experimento con ayuda del try-except
+        # Si al convertir el str a float falla, se ira al except y una variable llamada correcto hara que inicie el ciclo preguntando
+        # de nuevo hasta que ingrese los datos correctos, si no falla se le asigna a la variable resultados los resultados del usuario   
+        try: 
+            resultados = list(map(float, input("Ingrese los resultados separados por coma: ").split(",")))
+            correcto = True
+        except ValueError:
+            correcto = False
+        # Se le pide al usuario los ressultados obtenidos hasta que este los ingrese correctamente
+        while correcto == False:
+            system("cls")
+            print("Resultado ingresado incorrecto\nIngrese el resultado obtenido nuevamente\nRecuerde ingresar numeros: ")  
+            try:
+                resultados = list(map(float, input("Ingrese los resultados separados por coma: ").split(",")))
+                correcto = True
+            except ValueError:
+                correcto = False
+        experimentos[indice]["resultados"] = resultados
+        return experimentos
     
 
 # Futura funcion para generar el informe de un experimento
@@ -220,12 +283,13 @@ while opcion != 7:
         # Si el indice retorna 0, significa que la lista esta vacia y volvera al menu cuando el usuario presione enter
         # Si la lista contiene algun elemento no retornara cero si no el indice, el cual es usado para mostrar el experimento deseado 
         if indice != 0:
+            print()
             # Con el for recorro todo el diccionario y luego muestro sus llaves y datos del diccionario
             for ex in Experimentos[indice-1]:
                 print(f"{ex}: {Experimentos[indice-1][ex]}")
-            input("presione enter para continuar")
+            input("\npresione enter para continuar")
         else:
-            input("presione enter para continuar")
+            input("\npresione enter para continuar")
 
     # En caso de que la opcion sea 3 se usara la funcion RealizarAnalisisDeDatos para mostrar promedio, maximo y minimo
     elif opcion == 3:
