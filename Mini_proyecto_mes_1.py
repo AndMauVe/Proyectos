@@ -104,12 +104,13 @@ def MostrarResultadosExperimento(experimentos:list):
     
     # Creo una variable de tipo str donde guardo los nombres de los experimentos contenidos dentro de los diccionarios que estan
     # en experimentos, la llave de los diccionarios es nombre 
-    pregunta = ""
+    pregunta = "\n0.Volver\n"
+    
     for i,exp in enumerate(experimentos,1):
         pregunta += f"{i}. {exp["nombre"]}\n" 
     
     # Uso la funcion para validar que el usuario digite un dato correcto
-    indice = ValidacionDeNumero(1,len(experimentos),f"{pregunta}\nDeacuerdo al experimento")
+    indice = ValidacionDeNumero(0,len(experimentos),f"{pregunta}\nDeacuerdo al experimento")
 
     # Retorno el indice que contiene la ubicacion del experimento
     return indice
@@ -118,7 +119,8 @@ def MostrarResultadosExperimento(experimentos:list):
 def RealizarAnalisisDeDatos(experimentos:list ):
     #Se obtiene el indice donde se encuentra el experimento al cual se le va a realizar el analisis
     indice = MostrarResultadosExperimento(experimentos) - 1
-    
+    if indice == -1:
+        return
     # Con una variable datos almaceno los datos contenidos en el diccionario
     datos = experimentos[indice]["resultados"]
 
@@ -178,6 +180,8 @@ def ModificarExperimento(experimentos:list):
     indice = MostrarResultadosExperimento(experimentos) - 1
     # Con el indice que me da la funcion voy a reemplazar en la lista experimentos ese experimento con ese indice con un nuevo
     # experimento 
+    if indice == -1:
+        return experimentos
     mini_menu = "\n0.Volver a menu principal" 
     mini_menu += "\n1.Modificar todo el experimento"
     mini_menu += "\n2.Modificar nombre"
@@ -279,7 +283,8 @@ while opcion != 7:
 
         # Se guarda el indice del experimento que el usuario quiere ver
         indice = MostrarResultadosExperimento(Experimentos)
-        
+        if indice == -1:
+            continue
         # Si el indice retorna 0, significa que la lista esta vacia y volvera al menu cuando el usuario presione enter
         # Si la lista contiene algun elemento no retornara cero si no el indice, el cual es usado para mostrar el experimento deseado 
         if indice != 0:
@@ -289,7 +294,7 @@ while opcion != 7:
                 print(f"{ex}: {Experimentos[indice-1][ex]}")
             input("\npresione enter para continuar")
         else:
-            input("\npresione enter para continuar")
+            input("presione enter para continuar")
 
     # En caso de que la opcion sea 3 se usara la funcion RealizarAnalisisDeDatos para mostrar promedio, maximo y minimo
     elif opcion == 3:
