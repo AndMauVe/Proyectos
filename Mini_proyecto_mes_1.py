@@ -239,7 +239,7 @@ def ModificarExperimento(experimentos:list):
 def GenerarInforme(experimentos:list):
     #Esta incompleto, solo crea un txt y escribe Primera linea.\nSegunda línea.\n línea.\n
     archi1=open("G:\Mi unidad\phyton\Curso con Dev senior code\Proyectos\datos.txt","w") 
-    experimentos_cadena = ""
+    experimentos_cadena = " "
 
     archi1.write("Primer línea.\n") 
     archi1.write("Segunda línea.\n") 
