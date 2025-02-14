@@ -8,7 +8,8 @@ menu += "3. Realizar analisis de datos\n"
 menu += "4. Eliminar experimento\n"
 menu += "5. Modificar experimento\n"
 menu += "6. Generar informe de experimento\n"
-menu += "7. Salir\n" 
+menu += "7. Comparar experimentos\n"
+menu += "8. Salir\n"
 menu += "ej: si desea ingresar un nuevo experimento debe digitar 1"
 
 # Se crea una funcion encargada de validar que un dato sea un numero, esta funcion tiene como parametros un limite inferior
@@ -182,16 +183,81 @@ def GenerarInforme(experimentos:list):
     archi1.close() 
     print()
 
+def comparar_resultados(experimentos: list):
+    """
+    Función para comparar los resultados de al menos dos experimentos y determinar cuál tiene el mejor y el peor promedio.
+
+    Parámetros:
+    - experimentos (list): Lista de diccionarios que contienen los experimentos registrados.
+
+    Retorno:
+    - None. Muestra los resultados de la comparación en la consola.
+    """
+
+    # Verifica si hay al menos dos experimentos para comparar
+    if len(experimentos) < 2:
+        print("Debe haber al menos dos experimentos registrados para comparar.")
+        input("Presione Enter para continuar...")
+        return
+
+    print("\nSeleccione los experimentos que desea comparar (ingrese los números separados por coma):")
+
+    # Muestra la lista de experimentos disponibles con sus índices
+    for i, exp in enumerate(experimentos, 1):
+        print(f"{i}. {exp['nombre']}")
+
+    # Captura la selección de experimentos del usuario
+    seleccion = input("\nIngrese los números de los experimentos a comparar: ")
+
+    try:
+        # Convierte la selección en una lista de índices válidos
+        indices = [int(x) - 1 for x in seleccion.split(",") 
+                   if x.strip().isdigit() and 0 < int(x) <= len(experimentos)]
+    except ValueError:
+        # Maneja errores en la entrada del usuario
+        print("Entrada inválida. Asegúrese de ingresar números separados por coma.")
+        input("Presione Enter para continuar...")
+        return
+
+    # Verifica si el usuario ha seleccionado al menos dos experimentos
+    if len(indices) < 2:
+        print("Debe seleccionar al menos dos experimentos.")
+        input("Presione Enter para continuar...")
+        return
+
+    # Diccionario para almacenar los promedios de los experimentos seleccionados
+    promedios = {}
+
+    # Calcula el promedio de los resultados de cada experimento seleccionado
+    for i in indices:
+        datos = experimentos[i]["resultados"]
+        promedio = sum(datos) / len(datos)
+        promedios[experimentos[i]["nombre"]] = promedio
+
+    # Identifica el experimento con el mejor y el peor promedio
+    mejor_experimento = max(promedios, key=promedios.get)
+    peor_experimento = min(promedios, key=promedios.get)
+
+    # Muestra los resultados de la comparación
+    print("\nResultados de la comparación:")
+    for nombre, promedio in promedios.items():
+        print(f"{nombre}: Promedio {promedio:.2f}")
+
+    print(f"\n🔹 El mejor experimento es: {mejor_experimento} con un promedio de {promedios[mejor_experimento]:.2f}")
+    print(f"🔻 El peor experimento es: {peor_experimento} con un promedio de {promedios[peor_experimento]:.2f}")
+
+    input("\nPresione Enter para continuar...")
+
 # Creo una variable donde guardo la opcion de menu del usuario, tambien un diccionario para guardar los diccionarios con la
 # informacion de los experimentos 
 opcion = 0
 Experimentos = []
 
 # While para preguntarle al usuario que desea realizar
-while opcion != 7:
+while opcion != 8:
 
     # Uso la funcion de validacion para el numero ingresado de el menu
-    opcion = ValidacionDeNumero(1,7,menu)
+    opcion = ValidacionDeNumero(1,8,menu)
 
     # Limpio pantalla
     system("cls")
@@ -240,6 +306,11 @@ while opcion != 7:
     elif opcion == 6:
         GenerarInforme(Experimentos)
         #GenerarInforme
+
+    elif opcion == 7:
+        comparar_resultados(Experimentos)
+        #CompararExperimentos
+    
 
 
 print("Que tenga un buen dia ^^")
