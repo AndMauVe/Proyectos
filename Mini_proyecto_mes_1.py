@@ -1,4 +1,5 @@
 from os import system       #Se importa la funcion os de la libreria system para usarla para el limpiado de pantalla
+from os import path
 
 #Se crea una variable string (str) que contiene el menu mostrado al usuario
 menu =  "Digite la opcion deseada\n"
@@ -23,7 +24,7 @@ def ValidacionDeNumero(limite_inf,limite_sup,mensaje_pregunta:str ):
     numero = input(f"{mensaje_pregunta}\nIngrese la opcion deseada: ")
     
     # Si el numero ingresado resulta no ser un digito entero, la variable es_numero se le asigna un False para que el while
-    # mas adelante se ejecute el while, caso contrario se le asigna un True y se convierte a variable tipo int
+    # mas adelante se ejecute, caso contrario se le asigna un True y se convierte a variable tipo int
     if numero.isdigit() == False:
         es_numero = False
     else:
@@ -49,7 +50,7 @@ def ValidacionDeNumero(limite_inf,limite_sup,mensaje_pregunta:str ):
 
 # Se crea una funcion para agregar un experimento, esta funcion retorna un diccionario con todos los datos
 def AgregarNuevoExperimento():
-    # Se le pregunta al usuario un nombre para el experimento hasta que digite al menos una letra o caracter
+    # Se le pregunta al usuario un nombre para el experimento hasta que digite al menos una letra o caracter con ayuda del while
     nombre = ""
     while len(nombre) == 0:
         system("cls")
@@ -84,8 +85,12 @@ def AgregarNuevoExperimento():
     
     # Se le pide al usuario los ressultados obtenidos hasta que este los ingrese correctamente
     while correcto == False:
+        # Limpiado de pantalla
         system("cls")
+        # Se le pide al usuario que ingrese un dato correcto
         print("Resultado ingresado incorrecto\nIngrese el resultado obtenido nuevamente\nRecuerde ingresar numeros: ")  
+        # Si ocurre un error en la conversion de los datos ingresados correcto sera False para que el while siga ejecutandose
+        # hasta que la conversion sea correcta se le asigna a correcto True para terminar el while 
         try:
             resultados = list(map(float, input("Ingrese los resultados separados por coma: ").split(",")))
             correcto = True
@@ -106,7 +111,7 @@ def MostrarResultadosExperimento(experimentos:list):
     # Creo una variable de tipo str donde guardo los nombres de los experimentos contenidos dentro de los diccionarios que estan
     # en experimentos, la llave de los diccionarios es nombre 
     pregunta = "\n0.Volver\n"
-    
+    # Recorro los experimentos con ayuda del for y obtengo una numeracion que se usara como indice para la lista de experimentos    
     for i,exp in enumerate(experimentos,1):
         pregunta += f"{i}. {exp["nombre"]}\n" 
     
@@ -134,13 +139,14 @@ def RealizarAnalisisDeDatos(experimentos:list ):
 
 def EliminarExperimento(experimentos:list):
 
-# Se crea esta condicional para especificar si no tenemos experimentos se saldra a experimentos.
+# Se crea esta condicional para especificar si no tenemos experimentos, se retornara a experimentos.
     if not experimentos:
         print("No hay experimentos registrados para eliminar.")
         input("Presione Enter para continuar...")
         return experimentos
+    # Obtengo el indice que el usuario quiere eliminar con ayuda de la funcion MostrarResultadosExperimento
     indice = MostrarResultadosExperimento(experimentos) - 1
-
+    # Limpiado de pantalla
     system("cls")
 
 #Se crea esta variable para especificar que idice damos a elegir entre S o N adicional se agrego funciones 
@@ -160,23 +166,27 @@ def EliminarExperimento(experimentos:list):
 
 # Futura funcion para modificar un experimento, recibe un parametro de tipo lista con los experimentos
 def ModificarExperimento(experimentos:list):
-    # Obtengo el indice que el usuario quiere modificar 
+    # Si no hay experimentos guardados en la lista llamada experimentos se le dice al usuario y se retorna la lista
     if not experimentos:
         print("Aun no hay experimentos registrados.")
         input("presione enter para continuar")
         return experimentos
-    
+    # Obtengo el indice que el usuario quiere modificar 
     indice = MostrarResultadosExperimento(experimentos) - 1
     # Con el indice que me da la funcion voy a reemplazar en la lista experimentos ese experimento con ese indice con un nuevo
     # experimento 
     if indice == -1:
         return experimentos
+    
+    # Un pequeño menu para preguntar que desea modificar el usuario
     mini_menu = "\n0.Volver a menu principal" 
     mini_menu += "\n1.Modificar todo el experimento"
     mini_menu += "\n2.Modificar nombre"
     mini_menu += "\n3.Modificar fecha"
     mini_menu += "\n4.Modificar tipo"
     mini_menu += "\n5.Modificar resultados"
+
+    # Obtengo la opcion que el usuario desea 
     opcion_mini_menu = ValidacionDeNumero(0,5,mini_menu)
     if opcion_mini_menu == 0:
         #retorna el mismo experimento para no reemplazar nada cuando vuelva el usuario
@@ -225,29 +235,63 @@ def ModificarExperimento(experimentos:list):
             correcto = False
         # Se le pide al usuario los ressultados obtenidos hasta que este los ingrese correctamente
         while correcto == False:
+            # Limpiado de pantalla
             system("cls")
+            # Se le pide que ingrese el resultado coorrectamente
             print("Resultado ingresado incorrecto\nIngrese el resultado obtenido nuevamente\nRecuerde ingresar numeros: ")  
+            # Se hace una validacion de que el usuario ingrese correctamente los resultados del experimento con ayuda del 
+            # try-except, Si al convertir el str a float falla, se ira al except y una variable llamada correcto hara que 
+            # inicie el ciclo preguntando de nuevo hasta que ingrese los datos correctos si no falla se le asigna a la 
+            # variable resultados los resultados del usuario
             try:
                 resultados = list(map(float, input("Ingrese los resultados separados por coma: ").split(",")))
                 correcto = True
             except ValueError:
                 correcto = False
+        # Actualizo la lista con los nuevos resultados 
         experimentos[indice]["resultados"] = resultados
+        # retorno los experimentos
         return experimentos
     
 # Futura funcion para generar el informe de un experimento
 def GenerarInforme(experimentos:list):
-    #Esta incompleto, solo crea un txt y escribe Primera linea.\nSegunda línea.\n línea.\n
-    archi1=open("G:\Mi unidad\phyton\Curso con Dev senior code\Proyectos\datos.txt","w") 
-    experimentos_cadena = " "
+    # Obtengo la ruta donde esta ubicado el scrip 
+    direccion_del_scrip = path.dirname(path.abspath(__file__)) 
+    # Ruta completa para crear el txt donde se encuentre el scrip 
+    ubicacion_archivo_txt = path.join(direccion_del_scrip, "Informe.txt")  
 
-    archi1.write("Primer línea.\n") 
-    archi1.write("Segunda línea.\n") 
-    archi1.write(" línea.\n")  
-    archi1.close() 
-    print()
+    # Creo un archivo en la ruta guardada en ubicacion_archivo_txt, la w es el modo de edicion, si ya esta creado lo sobreescribe
+    # y si no esta creado crea un nuevo archivo txt con el nombre de Informe.txt, para acceder al archivo uso la palabra file 
+    with open(ubicacion_archivo_txt, "w") as file:
 
-def comparar_resultados(experimentos: list):
+        # Con file.write escribo en el archivo de texto abierto o creado
+        file.write("Estos son los experimentos regitrados:\n")
+
+        # Con el for escibo en el archivo de texto los detalles de los experimentos y los analisis realizados
+        for exp in experimentos:
+            # Escribo en el archivo de texto la descripcion del experimento actual en el for
+            file.write(f"\nEl experimento {exp["nombre"]} de tipo {exp["tipo"]} con la fecha {exp["fecha"]} \nobtuvo los siguientes resultados: {exp["resultados"]}\n")
+            # Con una variable datos almaceno los datos contenidos en el diccionario
+            datos = exp["resultados"]
+            # Con la variable datos calculo el promedio, el maximo y el minimo 
+            analisis = f"El promedio de los datos es: {sum(datos) / len(datos):.2f}\n"
+            analisis += f"El dato maximo es: {max(datos)}\n"
+            analisis += f"El dato minimo es: {min(datos)}\n"
+            # Guardo los calculos obtenidos en el archivo de texto
+            file.write(analisis)
+
+        # De la funcion comparar_resultados obtengo las comparaciones de todos los experimentos
+        promedios = comparar_resultados(experimentos,True)
+        # Escribo en el archivo de texto las comparaciones obtenidas
+        file.write(f"\n{promedios}")
+        # Limpia pantalla
+        system("cls")
+        # Se le avisa al usuario que se ha creado el archivo de texto 
+        print(f"El informe ha sido generado en un archivo de texto en la siguiente ubicacion\n{direccion_del_scrip}")
+        # Se espera a que el usuario ingrese enter para continuar con el codigo
+        input("Preiona enter para continuar")
+
+def comparar_resultados(experimentos: list,retornar_comp:bool):
     """
     Función para comparar los resultados de al menos dos experimentos y determinar cuál tiene el mejor y el peor promedio.
 
@@ -256,13 +300,7 @@ def comparar_resultados(experimentos: list):
 
     Retorno:
     - None. Muestra los resultados de la comparación en la consola.
-    """
-
-    # Verifica si hay al menos dos experimentos para comparar
-    if len(experimentos) < 2:
-        print("Debe haber al menos dos experimentos registrados para comparar.")
-        input("Presione Enter para continuar...")
-        return
+    """ 
 
     print("\nSeleccione los experimentos que desea comparar (ingrese los números separados por coma):")
 
@@ -271,7 +309,10 @@ def comparar_resultados(experimentos: list):
         print(f"{i}. {exp['nombre']}")
 
     # Captura la selección de experimentos del usuario
-    seleccion = input("\nIngrese los números de los experimentos a comparar: ")
+    if retornar_comp == False:
+        seleccion = input("\nIngrese los números de los experimentos a comparar: ")
+    else:
+        seleccion = ",".join(str(i) for i in range(1, len(experimentos) + 1))
 
     try:
         # Convierte la selección en una lista de índices válidos
@@ -284,33 +325,45 @@ def comparar_resultados(experimentos: list):
         return
 
     # Verifica si el usuario ha seleccionado al menos dos experimentos
-    if len(indices) < 2:
+    if len(indices) < 2 and retornar_comp == False:
         print("Debe seleccionar al menos dos experimentos.")
         input("Presione Enter para continuar...")
         return
 
     # Diccionario para almacenar los promedios de los experimentos seleccionados
     promedios = {}
-
     # Calcula el promedio de los resultados de cada experimento seleccionado
     for i in indices:
         datos = experimentos[i]["resultados"]
         promedio = sum(datos) / len(datos)
         promedios[experimentos[i]["nombre"]] = promedio
+       
 
     # Identifica el experimento con el mejor y el peor promedio
     mejor_experimento = max(promedios, key=promedios.get)
     peor_experimento = min(promedios, key=promedios.get)
-
+    
+    promedios_str = ""
     # Muestra los resultados de la comparación
     print("\nResultados de la comparación:")
+    # Recorro la lista y guardo los promedios y nombres de los experimentos
     for nombre, promedio in promedios.items():
-        print(f"{nombre}: Promedio {promedio:.2f}")
+        print(f"{nombre}: Promedio {promedio:.2f}") 
+        promedios_str += f"Promedio de {nombre} es: {promedio:.2f}\n" 
 
     print(f"\n🔹 El mejor experimento es: {mejor_experimento} con un promedio de {promedios[mejor_experimento]:.2f}")
     print(f"🔻 El peor experimento es: {peor_experimento} con un promedio de {promedios[peor_experimento]:.2f}")
+    
+    # Guardo el mensaje a retornar en la variable mensaje_retorno
+    mensaje_retorno = f"\nEl mejor experimento es {mejor_experimento} debido a que tiene un promedio de {promedios[mejor_experimento]:.2f} que es superior al promedio de los demas experimentos"
+    mensaje_retorno += f"\nEl peor experimento es {peor_experimento} debido a que tiene un promedio de {promedios[peor_experimento]:.2f} que es inferior al promedio de los demas experimentos\n"
 
-    input("\nPresione Enter para continuar...")
+    # En caso de no ser necesario retornar la informacion simplemente se espera a que el usuario presione enter
+    # caso contrario retorno el mensaje con la informacion de la comparacion de los experimentos 
+    if retornar_comp == False: 
+        input("\nPresione Enter para continuar...")
+    else:
+        return mensaje_retorno
 
 # Creo una variable donde guardo la opcion de menu del usuario, tambien un diccionario para guardar los diccionarios con la
 # informacion de los experimentos 
@@ -370,11 +423,20 @@ while opcion != 8:
         #ModificarExperimento
     
     elif opcion == 6:
-        GenerarInforme(Experimentos)
+        if len(Experimentos) != 0:
+            GenerarInforme(Experimentos)
+        else:
+            print("No hay experimentos registrados.")
+            input("Presione Enter para continuar...")
         #GenerarInforme
 
     elif opcion == 7:
-        comparar_resultados(Experimentos)
+        # Verifica si hay al menos dos experimentos para comparar
+        if len(Experimentos) < 2:
+            print("Debe haber al menos dos experimentos registrados para comparar.")
+            input("Presione Enter para continuar...")
+        else:
+            comparar_resultados(Experimentos,False)
         #CompararExperimentos
     
 
